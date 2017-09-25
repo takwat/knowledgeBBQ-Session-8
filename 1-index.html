@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Knockout.jsの最初の一歩</title>
+</head>
+
+<body>
+<h1 data-bind="text: message"></h1>
+</body>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
+<script>
+var ViewModel = new (function(){
+	this.message = ko.observable('Hello World');
+});
+ko.applyBindings(ViewModel);
+</script>
+</html>

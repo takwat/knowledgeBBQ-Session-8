@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>リストのレンダリング</title>
+</head>
+
+<body>
+<ul data-bind="foreach: records">
+	<li data-bind="text: $data"></li>
+</ul>
+
+
+
+
+
+</body>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
+<script>
+var ViewModel = new (function(){
+	this.records = ko.observableArray([
+		'One',
+		'Two',
+		'Three',
+		'Four'
+	]);
+});
+ko.applyBindings(ViewModel);
+</script>
+</html>

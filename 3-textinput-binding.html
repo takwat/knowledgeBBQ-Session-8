@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>フォームとの連携</title>
+</head>
+
+<body>
+<form>
+	<input type="text" size="60" data-bind="textInput: message">
+</form>
+<p>
+	入力されているのは【<span data-bind="text: message"></span>】です
+</p>
+</body>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
+<script>
+var ViewModel = new (function(){
+	this.message = ko.observable('Hello World');
+});
+ko.applyBindings(ViewModel);
+</script>
+</html>
