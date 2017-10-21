@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>これまでのものとObervableArrayのメソッドを用いたサンプル</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css">
+</head>
+
+<body>
+<div class="container">
+	<form class="form-horizontal">
+		<div class="form-group">
+			<input type="text" class="form-control" size="60" data-bind="textInput: name">は
+		</div>
+		<div class="form-group">
+			<input type="text" class="form-control" size="10" data-bind="textInput: price">円
+		</div>
+		<button type="button" class="btn btn-primary btn-block" data-bind="click: onClick">追加</button>
+	</form>
+</div>
+
+<ul data-bind="foreach: fruits">
+	<li>
+		<span data-bind="text: name"></span>
+		(<span data-bind="text: price"></span>円)は
+		<span data-bind="momentjs: stocked" data-format="YYYY-MM-DD"></span>に入荷しました
+	</li>
+</ul>
+
+</body>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.1/moment-with-locales.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+<script>
+ko.bindingHandlers.momentjs = {
+	// init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
+	// },
+	update: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
+		var value = null;
+		var accessor = valueAccessor();
+		if(typeof(accessor) === 'function'){
+			value = accessor();
+		}else{
+			value = accessor;
+		}
+		var format = $(element).attr('data-format') || 'YYYY-MM-DD HH:mm';
+		var nullif = $(element).attr('data-nullif') || '';
+
+		if(value && moment(value) && moment(value).isValid()){
+			$(element).text(value ? moment(value).format(format) : '');
+		}else{
+			$(element).text(nullif);
+		}
+	}
+};
+
+ko.bindingHandlers.number_format = {
+	update: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext){
+		var value = null;
+		var accessor = valueAccessor();
+		if(typeof(accessor) === 'function'){
+			value = accessor();
+		}else{
+			value = accessor;
+		}
+		if(value){
+			$(element).text(value ? value.toString().replace(/([0-9]+?)(?=(?:[0-9]{3})+$)/g , '$1,') : '');
+		}else{
+			$(element).text('');
+		}
+	}
+};
+
+
+
+var ViewModel = new (function(){
+	this.name = ko.observable('');
+	this.price = ko.observable('');
+	this.fruits = ko.observableArray([
+		{name: 'りんご', price: 100, stocked: new Date(2017,10,19)},
+		{name: 'みかん', price: 50,  stocked: new Date(2017,10,20)},
+		{name: 'バナナ', price: 200, stocked: new Date(2017,10,21)}
+	])
+
+	this.onClick = function(){
+		this.fruits.push(
+			{name: this.name(), price: this.price(), stocked: new Date()}
+		);
+	}
+
+
+});
+ko.applyBindings(ViewModel);
+</script>
+</html>
